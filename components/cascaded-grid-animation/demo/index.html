@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <title>cascaded-grid-animation demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../cascaded-grid-animation.html">
+    <link rel="import" href="./demo-grid.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+    <style>
+      .vertical-section-container {
+        max-width: 580px !important;
+      }
+    </style>
+  </head>
+  <body unresolved>
+
+    <div class="vertical-section-container centered">
+      <h3>Basic cascaded-grid-animation Demo</h3>
+      <demo-snippet>
+          <button id="play">Play animation</button>
+          <demo-grid id="grid"></demo-grid>
+      </demo-snippet>
+    </div>
+    <script>
+      document.querySelector('#play').addEventListener('click', function () {
+        document.querySelector('#grid').playAnimation('reveal');
+      })
+    </script>
+  </body>
+</html>
