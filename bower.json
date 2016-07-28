@@ -4,6 +4,8 @@
   "authors": [
     "SPAHI4 <spaxi4@yandex.ru>"
   ],
+  "homepage": "https://spahi4.github.io/cascaded-grid-animation/components/cascaded-grid-animation/",
+  "description": "Polymer animation provides cascaded grid animation due to material desing guidelines",
   "keywords": [
     "web-component",
     "web-components",
@@ -17,6 +19,10 @@
     "/.*",
     "/test/"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SPAHI4/cascaded-grid-animation.git"
+  },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "neon-elements": "polymerelements/neon-elements"
