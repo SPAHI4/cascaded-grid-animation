@@ -20,34 +20,33 @@ Configuration:
 
 Usage:
 ```
-    Polymer({
+Polymer({
 
-      is: 'demo-grid',
+    is: 'demo-grid',
 
-      behaviors: [
-        Polymer.NeonAnimationRunnerBehavior
-      ],
+    behaviors: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],
 
-      properties: {
-        animationConfig: {
-          type: Object,
-          value: function () {
-            return {
-              'reveal': [{
-                name: 'cascaded-grid-animation',
-                nodes: Polymer.dom(this.root).querySelectorAll('.grid > div')
-              }]
-            };
-          }
+    properties: {
+      animationConfig: {
+        type: Object,
+        value: function () {
+          return {
+            'reveal': [{
+              name: 'cascaded-grid-animation',
+              nodes: Polymer.dom(this.root).querySelectorAll('.grid > div')
+            }]
+          };
         }
       }
+    }
 
-    });
-
+ });
+```
 
 @homepage https://spahi4.github.io/cascaded-grid-animation/components/cascaded-grid-animation/
 @demo demo/index.html
-```
 -->
 
 <script>
