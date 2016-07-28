@@ -1,0 +1,63 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../neon-animation/neon-animation-runner-behavior.html">
+
+<dom-module id="demo-grid">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .grid div {
+      width: 150px;
+      height: 150px;
+      background-color: #03a9f4;
+      border-radius: 2px;
+      margin: 10px;
+    }
+  </style>
+  <template>
+
+    <div class="grid">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+
+      is: 'demo-grid',
+
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
+      properties: {
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'reveal': [{
+                name: 'cascaded-grid-animation',
+                nodes: Polymer.dom(this.root).querySelectorAll('.grid > div')
+              }]
+            };
+          }
+        }
+      }
+
+    });
+  </script>
+</dom-module>

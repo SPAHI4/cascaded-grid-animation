@@ -1,0 +1,147 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../neon-animation/neon-animation-behavior.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../neon-animation/web-animations.html">
+
+<!--
+`<cascaded-grid-animation>` applies an animation on an array of elements with a delay between each.
+the delay defaults to 100ms.
+
+Configuration:
+```
+{
+  name: 'cascaded-grid-animation',
+  nodes: <array-of-nodes>,
+  timing: <animation-timing>,
+  onlyVisible: <boolean-value>
+}
+```
+
+Usage:
+```
+    Polymer({
+
+      is: 'demo-grid',
+
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
+      properties: {
+        animationConfig: {
+          type: Object,
+          value: function () {
+            return {
+              'reveal': [{
+                name: 'cascaded-grid-animation',
+                nodes: Polymer.dom(this.root).querySelectorAll('.grid > div')
+              }]
+            };
+          }
+        }
+      }
+
+    });
+```
+-->
+
+<script>
+
+  'use strict';
+
+  Polymer({
+
+    is: 'cascaded-grid-animation',
+
+    behaviors: [Polymer.NeonAnimationBehavior],
+
+    /**
+     * @param {{
+   *   nodes: !Array<!Element>,
+   *   nodeDelay: (number|undefined),
+   *   timing: (Object|undefined),
+   *   onlyVisible: (Boolean|undefined)
+   *  }} config
+     */
+    configure: function configure(config) {
+      this._animations = [];
+      var nodes = config.nodes;
+      var effects = [];
+      var nodeDelay = config.nodeDelay || 100;
+      var onlyVisible = config.onlyVisible || true;
+
+      config.timing = config.timing || {};
+      config.timing.delay = config.timing.delay || 0;
+
+      var oldDelay = config.timing.delay;
+      var abortedConfigure;
+      var x = 1;
+      var y = 1;
+      var axis = [];
+      var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      var i = 0;
+      var lastNode;
+
+      // compute coordinates for each node
+      if (nodes.length) Array.prototype.forEach.call(nodes, function (node, index) {
+        i++;
+        var oldRect = (lastNode || node).getBoundingClientRect();
+        var rect = node.getBoundingClientRect();
+        if (onlyVisible && oldRect.top > windowHeight) return; // do not animate not visible nodes
+        if (oldRect.left > rect.left) {
+          x = 1;
+          ++y;
+        } else if(oldRect.left !== rect.left) {
+          ++x;
+        }
+        axis.push({x: x, y: y});
+        lastNode = node;
+      });
+
+      for (var node, index = 0; node = nodes[index]; index++) {
+        if (!axis[index]) break;
+        config.timing.delay = Math.sqrt(Math.pow(axis[index].x, 2) + Math.pow(axis[index].y, 2)) * nodeDelay; // use Pythagorean theorem
+        config.node = node;
+
+        var animation = document.createElement('fade-in-animation');
+        if (animation.isNeonAnimation) {
+          var effect = animation.configure(config);
+          this._animations.push(animation);
+          effects.push(effect);
+        } else {
+          console.warn(this.is + ': fade-in-animation not found!');
+          abortedConfigure = true;
+          break;
+        }
+
+        var animation = document.createElement('scale-up-animation');
+        if (animation.isNeonAnimation) {
+          var effect = animation.configure(config);
+          this._animations.push(animation);
+          effects.push(effect);
+        } else {
+          console.warn(this.is + ': scale-up-animation not found!');
+          abortedConfigure = true;
+          break;
+        }
+      }
+      config.timing.delay = oldDelay;
+      config.node = null;
+      // if a bad animation was configured, abort config.
+      if (abortedConfigure) {
+        return;
+      }
+
+      this._effect = new GroupEffect(effects);
+      return this._effect;
+    },
+
+    complete: function complete() {
+      for (var animation, index = 0; animation = this._animations[index]; index++) {
+        animation.complete(animation.config);
+      }
+    }
+  });
+
+</script>
